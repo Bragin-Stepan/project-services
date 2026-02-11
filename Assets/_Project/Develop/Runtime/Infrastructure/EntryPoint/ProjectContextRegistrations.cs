@@ -1,10 +1,17 @@
-﻿using _Project.Develop.Runtime.Configs.Gameplay.Levels;
+﻿using System;
+using System.Collections.Generic;
+using _Project.Develop.Runtime.Configs.Gameplay.Levels;
+using _Project.Develop.Runtime.Logic.Meta.Features.Wallet;
 using _Project.Develop.Runtime.Utilities.GameMode;
 using _Project.Develop.Runtime.Utilities.InputManagement;
+using _Project.Develop.Runtime.Utils.ReactiveManagement;
 using Assets._Project.Develop.Runtime.Infrastructure.DI;
+using Assets._Project.Develop.Runtime.Meta.Features.Wallet;
 using Assets._Project.Develop.Runtime.Utilities.AssetsManagement;
 using Assets._Project.Develop.Runtime.Utilities.ConfigsManagement;
 using Assets._Project.Develop.Runtime.Utilities.CoroutinesManagement;
+using Assets._Project.Develop.Runtime.Utilities.DataManagement;
+using Assets._Project.Develop.Runtime.Utilities.DataManagement.DataProviders;
 using Assets._Project.Develop.Runtime.Utilities.LoadingScreen;
 using Assets._Project.Develop.Runtime.Utilities.SceneManagement;
 using Object = UnityEngine.Object;
@@ -21,8 +28,12 @@ namespace Assets._Project.Develop.Runtime.Infrastructure.EntryPoint
             container.RegisterAsSingle(CreateSceneLoaderService);
             container.RegisterAsSingle(CreateSceneSwitcherService);
             container.RegisterAsSingle(CreateGameModeRunner);
+            container.RegisterAsSingle(CreateSaveLoadFactory);
             container.RegisterAsSingle<ILoadingScreen>(CreateLoadingScreen);
             container.RegisterAsSingle<IPlayerInputService>(CreateDesktopPlayerInputService);
+            container.RegisterAsSingle<ISaveLoadService>(CreateSaveLoadService);
+            container.RegisterAsSingle(CreateWalletService).NonLazy();
+            container.RegisterAsSingle(CreatePlayerDataProvider);
         }
 
         private static SceneSwitcherService CreateSceneSwitcherService(DIContainer c)
@@ -37,7 +48,6 @@ namespace Assets._Project.Develop.Runtime.Infrastructure.EntryPoint
         private static ConfigsProviderService CreateConfigsProviderService(DIContainer c)
         {
             ResourcesAssetsLoader resourcesAssetsLoader = c.Resolve<ResourcesAssetsLoader>();
-
             ResourcesConfigsLoader resourcesConfigsLoader = new(resourcesAssetsLoader);
 
             return new ConfigsProviderService(resourcesConfigsLoader);
@@ -48,6 +58,18 @@ namespace Assets._Project.Develop.Runtime.Infrastructure.EntryPoint
         
         private static DesktopPlayerInputService CreateDesktopPlayerInputService(DIContainer c)
             => new();
+        
+        private static SaveLoadFactory CreateSaveLoadFactory(DIContainer c) 
+            => new();
+        
+        private static PlayerDataProvider CreatePlayerDataProvider(DIContainer c)
+            => new(c.Resolve<ISaveLoadService>(), c.Resolve<ConfigsProviderService>());
+
+        private static SaveLoadService CreateSaveLoadService(DIContainer c)
+        {
+            SaveLoadFactory factory = c.Resolve<SaveLoadFactory>();
+            return factory.CreateDefaultSaveLoad();
+        }
 
         private static CoroutinesPerformer CreateCoroutinesPerformer(DIContainer c)
         {
@@ -67,6 +89,16 @@ namespace Assets._Project.Develop.Runtime.Infrastructure.EntryPoint
                 .Load<StandardLoadingScreen>(PathToResources.UI.LoadingScreen.Standard);
 
             return Object.Instantiate(standardLoadingScreenPrefab);
+        }
+        
+        private static WalletService CreateWalletService(DIContainer c)
+        {
+            Dictionary<CurrencyTypes, ReactiveVariable<int>> currencies = new();
+
+            foreach (CurrencyTypes currencyType in Enum.GetValues(typeof(CurrencyTypes)))
+                currencies[currencyType] = new ReactiveVariable<int>();
+
+            return new WalletService(currencies, c.Resolve<PlayerDataProvider>());
         }
         
         private static GameModeRunner CreateGameModeRunner(DIContainer c)

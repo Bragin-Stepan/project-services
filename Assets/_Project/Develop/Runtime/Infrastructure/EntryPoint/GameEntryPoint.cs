@@ -4,6 +4,9 @@ using Assets._Project.Develop.Runtime.Utilities.CoroutinesManagement;
 using Assets._Project.Develop.Runtime.Utilities.LoadingScreen;
 using Assets._Project.Develop.Runtime.Utilities.SceneManagement;
 using System.Collections;
+using _Project.Develop.Runtime.Utilities.DataManagement;
+using Assets._Project.Develop.Runtime.Utilities.DataManagement;
+using Assets._Project.Develop.Runtime.Utilities.DataManagement.DataProviders;
 using UnityEngine;
 
 namespace Assets._Project.Develop.Runtime.Infrastructure.EntryPoint
@@ -12,14 +15,9 @@ namespace Assets._Project.Develop.Runtime.Infrastructure.EntryPoint
     {
         private void Awake()
         {
-            Debug.Log("Старт проекта, сетап настроек");
-
             SetupAppSettings();
 
-            Debug.Log("Процесс регистрации сервисов всего проекта");
-
-            DIContainer projectContainer = new DIContainer();
-
+            DIContainer projectContainer = new();
             ProjectContextRegistrations.Process(projectContainer);
 
             projectContainer.Resolve<ICoroutinesPerformer>().StartPerform(Initialize(projectContainer));
@@ -35,16 +33,16 @@ namespace Assets._Project.Develop.Runtime.Infrastructure.EntryPoint
         {
             ILoadingScreen loadingScreen = container.Resolve<ILoadingScreen>();
             SceneSwitcherService sceneSwitcherService = container.Resolve<SceneSwitcherService>();
+            PlayerDataProvider playerDataProvider = container.Resolve<PlayerDataProvider>();
 
             loadingScreen.Show();
 
-            Debug.Log("Начинается инициализация сервисов");
-
             yield return container.Resolve<ConfigsProviderService>().LoadAsync();
-
+            
+            yield return DataUtils.LoadProviderAsync(playerDataProvider);
+            // yield return DataUtils.LoadProviderAsync(SettingsDataProvider);
+            
             yield return new WaitForSeconds(0.5f);
-
-            Debug.Log("Завершается инициализация сервисов");
 
             loadingScreen.Hide();
 
