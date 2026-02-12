@@ -1,5 +1,5 @@
 ﻿using _Project.Develop.Runtime.Logic.Gameplay.Features.GameSession;
-using _Project.Develop.Runtime.Logic.Meta.Features.GameProgressionStatsService;
+using _Project.Develop.Runtime.Logic.Meta.Features;
 using _Project.Develop.Runtime.Logic.Meta.Features.Reward;
 using _Project.Develop.Runtime.Utilities.InputManagement;
 using Assets._Project.Develop.Runtime.Gameplay.Infrastructure;

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using _Project.Develop.Runtime.Configs.Gameplay.Levels;
 using _Project.Develop.Runtime.Configs.Meta;
-using _Project.Develop.Runtime.Logic.Meta.Features.GameProgressionStatsService;
+using _Project.Develop.Runtime.Logic.Meta.Features;
 using _Project.Develop.Runtime.Logic.Meta.Features.Reward;
 using _Project.Develop.Runtime.Logic.Meta.Features.Wallet;
 using _Project.Develop.Runtime.Utilities.GameMode;
@@ -38,7 +38,6 @@ namespace Assets._Project.Develop.Runtime.Infrastructure.EntryPoint
             container.RegisterAsSingle<ISaveLoadService>(CreateSaveLoadService);
             container.RegisterAsSingle(CreateWalletService).NonLazy();
             container.RegisterAsSingle(CreatePlayerDataProvider);
-            container.RegisterAsSingle(CreateRewardService);
         }
         
         private static ConfigsProviderService CreateConfigsProviderService(DIContainer c)
@@ -74,10 +73,7 @@ namespace Assets._Project.Develop.Runtime.Infrastructure.EntryPoint
             => new (c.Resolve<PlayerDataProvider>());
 
         private static SaveLoadService CreateSaveLoadService(DIContainer c)
-        {
-            SaveLoadFactory factory = c.Resolve<SaveLoadFactory>();
-            return factory.CreateDefaultSaveLoad();
-        }
+            => c.Resolve<SaveLoadFactory>().CreateDefaultSaveLoad();
 
         private static CoroutinesPerformer CreateCoroutinesPerformer(DIContainer c)
         {
@@ -116,12 +112,6 @@ namespace Assets._Project.Develop.Runtime.Infrastructure.EntryPoint
             ICoroutinesPerformer coroutinesPerformer = c.Resolve<ICoroutinesPerformer>();
             
             return new GameModeRunner(coroutinesPerformer, levelsConfig, sceneSwitcher);
-        }
-        
-        private static RewardService CreateRewardService(DIContainer c)
-        {
-            RewardsConfigSO configs = c.Resolve<ConfigsProviderService>().GetConfig<RewardsConfigSO>();
-            return new RewardService(configs);
         }
     }
 }

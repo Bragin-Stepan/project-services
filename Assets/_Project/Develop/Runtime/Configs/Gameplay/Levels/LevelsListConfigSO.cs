@@ -20,7 +20,7 @@ namespace _Project.Develop.Runtime.Configs.Gameplay.Levels
     [Serializable]
     public class LevelsConfig
     {
-        [field: FormerlySerializedAs("<GameMode>k__BackingField")] [field: SerializeField] public GameModeType GameModeType { get; private set; }
+        [field: SerializeField] public GameModeType GameModeType { get; private set; }
         [field: SerializeField] public LevelConfigSO[] Levels { get; private set; }
     }
 }

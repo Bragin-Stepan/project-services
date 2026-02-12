@@ -2,7 +2,7 @@
 using Assets._Project.Develop.Runtime.Utilities.DataManagement;
 using Assets._Project.Develop.Runtime.Utilities.DataManagement.DataProviders;
 
-namespace _Project.Develop.Runtime.Logic.Meta.Features.GameProgressionStatsService
+namespace _Project.Develop.Runtime.Logic.Meta.Features
 {
     public class GameProgressionStatsService : IDataReader<PlayerData>, IDataWriter<PlayerData>
     {

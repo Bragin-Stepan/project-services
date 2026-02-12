@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace _Project.Develop.Runtime.Configs.Meta
 {
-    [CreateAssetMenu(menuName = "Configs/Meta/Wallet/NewRewardsConfig", fileName = "RewardsConfig")]
+    [CreateAssetMenu(menuName = "Configs/Meta/Rewards/NewRewardsConfig", fileName = "RewardsConfig")]
     public class RewardsConfigSO : ScriptableObject
     {
         [SerializeField] private List<RewardsConfig> _values;

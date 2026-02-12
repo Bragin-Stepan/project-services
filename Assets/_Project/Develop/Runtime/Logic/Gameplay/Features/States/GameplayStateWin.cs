@@ -1,4 +1,4 @@
-﻿using _Project.Develop.Runtime.Logic.Meta.Features.GameProgressionStatsService;
+﻿using _Project.Develop.Runtime.Logic.Meta.Features;
 using _Project.Develop.Runtime.Logic.Meta.Features.Reward;
 using _Project.Develop.Runtime.Logic.Meta.Features.Wallet;
 using _Project.Develop.Runtime.Utilities.InputManagement;
