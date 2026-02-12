@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using _Project.Develop.Runtime.Configs.Gameplay.Levels;
+using _Project.Develop.Runtime.Configs.Meta;
+using _Project.Develop.Runtime.Logic.Meta.Features.GameProgressionStatsService;
+using _Project.Develop.Runtime.Logic.Meta.Features.Reward;
 using _Project.Develop.Runtime.Logic.Meta.Features.Wallet;
 using _Project.Develop.Runtime.Utilities.GameMode;
 using _Project.Develop.Runtime.Utilities.InputManagement;
@@ -27,6 +30,7 @@ namespace Assets._Project.Develop.Runtime.Infrastructure.EntryPoint
             container.RegisterAsSingle(CreateResourcesAssetsLoader);
             container.RegisterAsSingle(CreateSceneLoaderService);
             container.RegisterAsSingle(CreateSceneSwitcherService);
+            container.RegisterAsSingle(CreateGameProgressionStatsService);
             container.RegisterAsSingle(CreateGameModeRunner);
             container.RegisterAsSingle(CreateSaveLoadFactory);
             container.RegisterAsSingle<ILoadingScreen>(CreateLoadingScreen);
@@ -34,6 +38,15 @@ namespace Assets._Project.Develop.Runtime.Infrastructure.EntryPoint
             container.RegisterAsSingle<ISaveLoadService>(CreateSaveLoadService);
             container.RegisterAsSingle(CreateWalletService).NonLazy();
             container.RegisterAsSingle(CreatePlayerDataProvider);
+            container.RegisterAsSingle(CreateRewardService);
+        }
+        
+        private static ConfigsProviderService CreateConfigsProviderService(DIContainer c)
+        {
+            ResourcesAssetsLoader resourcesAssetsLoader = c.Resolve<ResourcesAssetsLoader>();
+            ResourcesConfigsLoader resourcesConfigsLoader = new(resourcesAssetsLoader);
+
+            return new ConfigsProviderService(resourcesConfigsLoader);
         }
 
         private static SceneSwitcherService CreateSceneSwitcherService(DIContainer c)
@@ -44,14 +57,6 @@ namespace Assets._Project.Develop.Runtime.Infrastructure.EntryPoint
 
         private static SceneLoaderService CreateSceneLoaderService(DIContainer c)
             => new();
-
-        private static ConfigsProviderService CreateConfigsProviderService(DIContainer c)
-        {
-            ResourcesAssetsLoader resourcesAssetsLoader = c.Resolve<ResourcesAssetsLoader>();
-            ResourcesConfigsLoader resourcesConfigsLoader = new(resourcesAssetsLoader);
-
-            return new ConfigsProviderService(resourcesConfigsLoader);
-        }
 
         private static ResourcesAssetsLoader CreateResourcesAssetsLoader(DIContainer c)
             => new();
@@ -64,6 +69,9 @@ namespace Assets._Project.Develop.Runtime.Infrastructure.EntryPoint
         
         private static PlayerDataProvider CreatePlayerDataProvider(DIContainer c)
             => new(c.Resolve<ISaveLoadService>(), c.Resolve<ConfigsProviderService>());
+        
+        private static GameProgressionStatsService CreateGameProgressionStatsService(DIContainer c)
+            => new (c.Resolve<PlayerDataProvider>());
 
         private static SaveLoadService CreateSaveLoadService(DIContainer c)
         {
@@ -108,6 +116,12 @@ namespace Assets._Project.Develop.Runtime.Infrastructure.EntryPoint
             ICoroutinesPerformer coroutinesPerformer = c.Resolve<ICoroutinesPerformer>();
             
             return new GameModeRunner(coroutinesPerformer, levelsConfig, sceneSwitcher);
+        }
+        
+        private static RewardService CreateRewardService(DIContainer c)
+        {
+            RewardsConfigSO configs = c.Resolve<ConfigsProviderService>().GetConfig<RewardsConfigSO>();
+            return new RewardService(configs);
         }
     }
 }

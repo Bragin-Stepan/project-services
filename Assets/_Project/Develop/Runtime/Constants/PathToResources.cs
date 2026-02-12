@@ -32,6 +32,7 @@ namespace Assets._Project.Develop.Runtime.Utilities.SceneManagement
             
             { typeof(StartWalletConfigSO), "Configs/Meta/Wallet/StartWalletConfig" },
             { typeof(CurrencyIconsConfigSO), "Configs/Meta/Wallet/CurrencyIconsConfig" },
+            { typeof(RewardsConfigSO), "Configs/Meta/Wallet/RewardsConfig" },
         };
     }
 }

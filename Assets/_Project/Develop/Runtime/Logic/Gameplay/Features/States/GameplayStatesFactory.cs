@@ -1,9 +1,12 @@
 ﻿using _Project.Develop.Runtime.Logic.Gameplay.Features.GameSession;
+using _Project.Develop.Runtime.Logic.Meta.Features.GameProgressionStatsService;
+using _Project.Develop.Runtime.Logic.Meta.Features.Reward;
 using _Project.Develop.Runtime.Utilities.InputManagement;
-using _Project.Develop.Runtime.Utilities.StateMachine;
 using Assets._Project.Develop.Runtime.Gameplay.Infrastructure;
 using Assets._Project.Develop.Runtime.Infrastructure.DI;
+using Assets._Project.Develop.Runtime.Meta.Features.Wallet;
 using Assets._Project.Develop.Runtime.Utilities.CoroutinesManagement;
+using Assets._Project.Develop.Runtime.Utilities.DataManagement.DataProviders;
 using Assets._Project.Develop.Runtime.Utilities.SceneManagement;
 
 namespace _Project.Develop.Runtime.Logic.Gameplay.Features.States
@@ -18,27 +21,33 @@ namespace _Project.Develop.Runtime.Logic.Gameplay.Features.States
 
         public GameplayStateProcess CreateProcess(GameplayInputArgs inputArgs)
         {
-            IStateChanger stateChanger = _container.Resolve<GameplayStateMachine>();
-            GameSessionService gameSession = _container.Resolve<GameSessionService>();
-            
-            return new GameplayStateProcess(inputArgs, stateChanger, gameSession);
+            return new GameplayStateProcess(inputArgs,
+                _container.Resolve<GameplayStateMachine>(),
+                _container.Resolve<GameSessionService>());
         }
         
         public GameplayStateWin CreateWin()
         {
-            SceneSwitcherService sceneSwitcher = _container.Resolve<SceneSwitcherService>();
-            ICoroutinesPerformer coroutinesPerformer = _container.Resolve<ICoroutinesPerformer>();
-            IPlayerInputService playerInput = _container.Resolve<IPlayerInputService>();
-            
-            return new GameplayStateWin(sceneSwitcher, coroutinesPerformer, playerInput);
+            return new GameplayStateWin(
+                _container.Resolve<SceneSwitcherService>(),
+                _container.Resolve<WalletService>(),
+                _container.Resolve<GameProgressionStatsService>(),
+                _container.Resolve<PlayerDataProvider>(),
+                _container.Resolve<RewardService>(),
+                _container.Resolve<ICoroutinesPerformer>(),
+                _container.Resolve<IPlayerInputService>());
         }
         
         public GameplayStateDefeat CreateDefeat()
         {
-            IStateChanger stateChanger = _container.Resolve<GameplayStateMachine>();
-            IPlayerInputService playerInput = _container.Resolve<IPlayerInputService>();
-            
-            return new GameplayStateDefeat(stateChanger, playerInput);
+            return new GameplayStateDefeat(
+                _container.Resolve<GameplayStateMachine>(),
+                _container.Resolve<IPlayerInputService>(),
+                _container.Resolve<WalletService>(),
+                _container.Resolve<RewardService>(),
+                _container.Resolve<GameProgressionStatsService>(),
+                _container.Resolve<PlayerDataProvider>(),
+                _container.Resolve<ICoroutinesPerformer>());
         }
     }
 }
