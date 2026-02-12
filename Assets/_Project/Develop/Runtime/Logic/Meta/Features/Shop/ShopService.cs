@@ -1,10 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Assets._Project.Develop.Runtime.Meta.Features.Wallet;
 
 namespace _Project.Develop.Runtime.Logic.Meta.Features.Shop
 {
     public class ShopService
     {
+        public event Action<ShopItem> ItemAdded;
+        public event Action<ShopItem> ItemRemoved;
+        public event Action<ShopItem> ItemBought;
+        
         private readonly WalletService _wallet;
         private readonly List<ShopItem> _items;
         
@@ -18,11 +23,19 @@ namespace _Project.Develop.Runtime.Logic.Meta.Features.Shop
         
         public IReadOnlyList<ShopItem> Items => _items;
         
-        public void AddItem(ShopItem item) => _items.Add(item);
-        
-        public void RemoveItem(ShopItem item) => _items.Remove(item);
-        
         public bool CanBuy(ShopItem item) => _wallet.Enough(item.Currency, item.Price);
+        
+        public void AddItem(ShopItem item)
+        {
+            _items.Add(item);
+            ItemAdded?.Invoke(item);
+        }
+
+        public void RemoveItem(ShopItem item)
+        {
+            ItemRemoved?.Invoke(item);
+            _items.Remove(item);
+        }
         
         public bool TryBuy(ShopItem item)
         {
@@ -30,7 +43,10 @@ namespace _Project.Develop.Runtime.Logic.Meta.Features.Shop
                 return false;
             
             _wallet.Spend(item.Currency, item.Price);
+            
             item.Action.Activate();
+            
+            ItemBought?.Invoke(item);
             
             return true;
         }
