@@ -1,4 +1,4 @@
-﻿using _Project.Develop.Runtime.Logic.Gameplay.Features.Sequence;
+﻿using _Project.Develop.Runtime.Logic.Gameplay.Features.GameSession;
 using _Project.Develop.Runtime.Utilities.InputManagement;
 using _Project.Develop.Runtime.Utilities.StateMachine;
 using Assets._Project.Develop.Runtime.Gameplay.Infrastructure;
@@ -18,11 +18,10 @@ namespace _Project.Develop.Runtime.Logic.Gameplay.Features.States
 
         public GameplayStateProcess CreateProcess(GameplayInputArgs inputArgs)
         {
-            SequenceFactory sequenceFactory = _container.Resolve<SequenceFactory>();
             IStateChanger stateChanger = _container.Resolve<GameplayStateMachine>();
-            IPlayerInputService playerInput = _container.Resolve<IPlayerInputService>();
+            GameSessionService gameSession = _container.Resolve<GameSessionService>();
             
-            return new GameplayStateProcess(sequenceFactory, inputArgs, stateChanger, playerInput);
+            return new GameplayStateProcess(inputArgs, stateChanger, gameSession);
         }
         
         public GameplayStateWin CreateWin()
