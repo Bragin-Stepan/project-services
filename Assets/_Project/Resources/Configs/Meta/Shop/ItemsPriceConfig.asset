@@ -16,3 +16,6 @@ MonoBehaviour:
   - <ItemName>k__BackingField: 0
     <Currency>k__BackingField: 0
     <Value>k__BackingField: 10
+  - <ItemName>k__BackingField: 1
+    <Currency>k__BackingField: 0
+    <Value>k__BackingField: 5

@@ -43,12 +43,16 @@ namespace _Project.Develop.Runtime.Logic.Gameplay.Features.States
         {
             base.OnEnter();
             
-            Debug.Log("Вы выйграли");
-            Debug.Log("=== Нажмите пробел для выхода из игры ===");
-            
             _walletService.Add(CurrencyTypes.Gold, _rewardService.GetRewardFor(RewardTypes.Win));
             _gameProgressionStatsService.IncrementWinCount();
             _coroutinesPerformer.StartPerform(_playerDataProvider.SaveAsync());
+            
+            Debug.Log("Добавили: " + _rewardService.GetRewardFor(RewardTypes.Win) + " монет");
+            Debug.Log("Кошелек: " + _walletService.GetCurrency(CurrencyTypes.Gold) + " монет");
+            Debug.Log($"Ваш счет: {_gameProgressionStatsService.LoseCount.Value} поражений и {_gameProgressionStatsService.WinCount.Value} побед");
+            
+            Debug.Log("Вы выйграли");
+            Debug.Log("=== Нажмите пробел для выхода из игры ===");
 
             _playerInput.OnJump += OnJumpPressed;
         }
@@ -60,7 +64,7 @@ namespace _Project.Develop.Runtime.Logic.Gameplay.Features.States
             _playerInput.OnJump -= OnJumpPressed;
         }
         
-        private void OnJumpPressed()
-            => _coroutinesPerformer.StartPerform(_sceneSwitcherService.ProcessSwitchTo(Scenes.MainMenu));
+        private void OnJumpPressed() => _coroutinesPerformer.StartPerform(
+            _sceneSwitcherService.ProcessSwitchTo(Scenes.MainMenu));
     }
 }

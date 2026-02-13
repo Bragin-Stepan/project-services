@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: LevelsListConfig
   m_EditorClassIdentifier: 
   _list:
-  - <GameMode>k__BackingField: 0
+  - <GameModeType>k__BackingField: 0
     <Levels>k__BackingField:
     - {fileID: 11400000, guid: 36101334213f2494391360ca148d11bd, type: 2}
     - {fileID: 11400000, guid: ec7cf80d57b98a9438a0b3b0c734943e, type: 2}
-  - <GameMode>k__BackingField: 1
+  - <GameModeType>k__BackingField: 1
     <Levels>k__BackingField:
     - {fileID: 11400000, guid: ec7cf80d57b98a9438a0b3b0c734943e, type: 2}
     - {fileID: 11400000, guid: 36101334213f2494391360ca148d11bd, type: 2}

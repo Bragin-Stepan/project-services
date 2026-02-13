@@ -14,14 +14,16 @@ namespace _Project.Develop.Runtime.Utilities.DataManagement
             yield return data.ExistsAsync(result => isDataSaveExists = result);
 
             if (isDataSaveExists)
+            {
                 yield return data.LoadAsync();
+                Debug.Log($"Data {typeof(T).Name} loaded");
+            }
             else
             {
                 data.Reset();
                 yield return data.SaveAsync();
+                Debug.Log($"Data {typeof(T).Name} created");
             }
-            
-            Debug.Log($"Data {typeof(T).Name} loaded");
         }
     }
 }

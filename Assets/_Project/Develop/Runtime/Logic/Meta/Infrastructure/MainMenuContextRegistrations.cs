@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using _Project.Develop.Runtime.Logic.Meta.Features.Shop;
 using Assets._Project.Develop.Runtime.Infrastructure.DI;
 using Assets._Project.Develop.Runtime.Meta.Features.Wallet;
+using Assets._Project.Develop.Runtime.Utilities.CoroutinesManagement;
+using Assets._Project.Develop.Runtime.Utilities.DataManagement.DataProviders;
 
 namespace Assets._Project.Develop.Runtime.Meta.Infrastructure
 {
@@ -25,9 +27,13 @@ namespace Assets._Project.Develop.Runtime.Meta.Infrastructure
             List<ShopItem> items = new();
 
             foreach (ItemShopNames itemName in Enum.GetValues(typeof(ItemShopNames)))
-                factory.Create(itemName);
+                items.Add(factory.Create(itemName));
             
-            return new ShopService(c.Resolve<WalletService>(), items);
+            return new ShopService(
+                c.Resolve<WalletService>(),
+                c.Resolve<PlayerDataProvider>(),
+                c.Resolve<ICoroutinesPerformer>(),
+                items);
         }
     }
 }

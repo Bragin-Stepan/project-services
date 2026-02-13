@@ -1,10 +1,12 @@
-﻿using Assets._Project.Develop.Runtime.Gameplay.Infrastructure;
-using Assets._Project.Develop.Runtime.Infrastructure;
+﻿using Assets._Project.Develop.Runtime.Infrastructure;
 using Assets._Project.Develop.Runtime.Infrastructure.DI;
-using Assets._Project.Develop.Runtime.Utilities.CoroutinesManagement;
 using Assets._Project.Develop.Runtime.Utilities.SceneManagement;
 using System.Collections;
+using _Project.Develop.Runtime.Logic.Meta.Features;
+using _Project.Develop.Runtime.Logic.Meta.Features.Shop;
+using _Project.Develop.Runtime.Logic.Meta.Features.Wallet;
 using _Project.Develop.Runtime.Utilities.GameMode;
+using Assets._Project.Develop.Runtime.Meta.Features.Wallet;
 using UnityEngine;
 
 namespace Assets._Project.Develop.Runtime.Meta.Infrastructure
@@ -13,6 +15,7 @@ namespace Assets._Project.Develop.Runtime.Meta.Infrastructure
     {
         private DIContainer _container;
         private GameModeRunner _gameRunner;
+        private ShopService _shop;
 
         public override void ProcessRegistrations(DIContainer container, IInputSceneArgs sceneArgs = null)
         {
@@ -23,7 +26,8 @@ namespace Assets._Project.Develop.Runtime.Meta.Infrastructure
 
         public override IEnumerator Initialize()
         {
-            _gameRunner = _container.Resolve<GameModeRunner>(); 
+            _gameRunner = _container.Resolve<GameModeRunner>();
+            _shop = _container.Resolve<ShopService>();
 
             yield break;
         }
@@ -38,6 +42,35 @@ namespace Assets._Project.Develop.Runtime.Meta.Infrastructure
             
             if (Input.GetKeyDown(KeyCode.Alpha2))
                 _gameRunner.Run(GameModeType.Numbers);
+
+            if (Input.GetKeyDown(KeyCode.I))
+                foreach (ShopItem item in _shop.Items)
+                    Debug.Log($"Item: {item.Name}, Price: {item.Price}");
+
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                ShopItem resetGameStats = _shop.GetItemBy(ItemShopNames.ResetGameStats);
+
+                if (_shop.TryBuy(resetGameStats))
+                    Debug.Log($"Вы сбросили статистику игр за {resetGameStats.Price} монет");
+                else
+                    Debug.Log($"Не хватает монет, нужно еще {resetGameStats.Price - _container.Resolve<WalletService>().GetCurrency(CurrencyTypes.Gold).Value}");
+            }
+        }
+
+        private void OnGUI()
+        {
+            GUI.Label(new Rect(10, 10, 100, 20), 
+                "Main Menu");
+            
+            GUI.Label(new Rect(10, 30, 100, 20), 
+                $"У вас монет: {_container.Resolve<WalletService>().GetCurrency(CurrencyTypes.Gold).Value}");
+            
+            GUI.Label(new Rect(10, 50, 100, 20), 
+                "Побед: " + _container.Resolve<GameProgressionStatsService>().WinCount.Value);
+            
+            GUI.Label(new Rect(10, 70, 100, 20), 
+                "Поражений: " + _container.Resolve<GameProgressionStatsService>().LoseCount.Value);
         }
     }
 }

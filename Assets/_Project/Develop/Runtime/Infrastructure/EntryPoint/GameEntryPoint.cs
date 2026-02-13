@@ -5,7 +5,6 @@ using Assets._Project.Develop.Runtime.Utilities.LoadingScreen;
 using Assets._Project.Develop.Runtime.Utilities.SceneManagement;
 using System.Collections;
 using _Project.Develop.Runtime.Utilities.DataManagement;
-using Assets._Project.Develop.Runtime.Utilities.DataManagement;
 using Assets._Project.Develop.Runtime.Utilities.DataManagement.DataProviders;
 using UnityEngine;
 
@@ -20,6 +19,7 @@ namespace Assets._Project.Develop.Runtime.Infrastructure.EntryPoint
             DIContainer projectContainer = new();
             ProjectContextRegistrations.Process(projectContainer);
 
+            projectContainer.Initialize();
             projectContainer.Resolve<ICoroutinesPerformer>().StartPerform(Initialize(projectContainer));
         }
 

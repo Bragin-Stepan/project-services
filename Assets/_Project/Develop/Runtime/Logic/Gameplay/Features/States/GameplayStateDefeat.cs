@@ -41,13 +41,17 @@ namespace _Project.Develop.Runtime.Logic.Gameplay.Features.States
         public override void OnEnter()
         {
             base.OnEnter();
-
-            Debug.Log("Вы проиграли");
-            Debug.Log("=== Нажмите пробел для перезапуска ===");
             
             _walletService.Spend(CurrencyTypes.Gold, _rewardService.GetRewardFor(RewardTypes.Lose));
             _gameProgressionStatsService.IncrementLoseCount();
             _coroutinesPerformer.StartPerform(_playerDataProvider.SaveAsync());
+            
+            Debug.Log("Забрали: " + _rewardService.GetRewardFor(RewardTypes.Lose) + " монет");
+            Debug.Log("Кошелек: " + _walletService.GetCurrency(CurrencyTypes.Gold) + " монет");
+            Debug.Log($"Ваш счет: {_gameProgressionStatsService.LoseCount.Value} поражений и {_gameProgressionStatsService.WinCount.Value} побед");
+            
+            Debug.Log("Вы проиграли");
+            Debug.Log("=== Нажмите пробел для перезапуска ===");
 
             _playerInput.OnJump += OnJumpPressed;
         }

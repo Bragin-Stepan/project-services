@@ -5,8 +5,11 @@ using Assets._Project.Develop.Runtime.Utilities.SceneManagement;
 using System;
 using System.Collections;
 using _Project.Develop.Runtime.Logic.Gameplay.Features.States;
+using _Project.Develop.Runtime.Logic.Meta.Features;
+using _Project.Develop.Runtime.Logic.Meta.Features.Wallet;
 using _Project.Develop.Runtime.Utilities.GameMode;
 using _Project.Develop.Runtime.Utilities.InputManagement;
+using Assets._Project.Develop.Runtime.Meta.Features.Wallet;
 using UnityEngine;
 
 namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
@@ -57,6 +60,21 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
         {
             _stateMachine?.Update(Time.deltaTime);
             _playerInput?.Update(Time.deltaTime);
+        }
+
+        private void OnGUI()
+        {
+            GUI.Label(new Rect(10, 10, 100, 20), 
+                "Gameplay");
+                
+            GUI.Label(new Rect(10, 30, 100, 20), 
+                "Монет: " + _container.Resolve<WalletService>().GetCurrency(CurrencyTypes.Gold).Value);
+            
+            GUI.Label(new Rect(10, 50, 100, 20), 
+                "Побед: " + _container.Resolve<GameProgressionStatsService>().WinCount.Value);
+            
+            GUI.Label(new Rect(10, 70, 100, 20), 
+                "Поражений: " + _container.Resolve<GameProgressionStatsService>().LoseCount.Value);
         }
     }
 }

@@ -22,7 +22,7 @@ namespace _Project.Develop.Runtime.Logic.Meta.Features.Shop
             CurrencyTypes currency = _config.GetCurrencyFor(name);
             IBuyableAction action = _actionFactory.Create(name);
 
-            return new ShopItem(price, currency, action);
+            return new ShopItem(price, currency, name, action);
         }
     }
 }

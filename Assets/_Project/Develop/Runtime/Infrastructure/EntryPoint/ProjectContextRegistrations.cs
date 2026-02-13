@@ -30,7 +30,7 @@ namespace Assets._Project.Develop.Runtime.Infrastructure.EntryPoint
             container.RegisterAsSingle(CreateResourcesAssetsLoader);
             container.RegisterAsSingle(CreateSceneLoaderService);
             container.RegisterAsSingle(CreateSceneSwitcherService);
-            container.RegisterAsSingle(CreateGameProgressionStatsService);
+            container.RegisterAsSingle(CreateGameProgressionStatsService).NonLazy();
             container.RegisterAsSingle(CreateGameModeRunner);
             container.RegisterAsSingle(CreateSaveLoadFactory);
             container.RegisterAsSingle<ILoadingScreen>(CreateLoadingScreen);
