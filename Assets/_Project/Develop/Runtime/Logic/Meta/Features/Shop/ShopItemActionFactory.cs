@@ -17,7 +17,7 @@ namespace _Project.Develop.Runtime.Logic.Meta.Features.Shop
             return name switch
             {
                 ItemShopNames.ResetGameStats => new ResetStatsShopItemAction(_progressionStats),
-                
+                ItemShopNames.ResetLoseStat => new ResetLoseStatShopItemAction(_progressionStats), // Просто как пример
                 _ => throw new ArgumentOutOfRangeException(nameof(name), name, null)
             };
         }

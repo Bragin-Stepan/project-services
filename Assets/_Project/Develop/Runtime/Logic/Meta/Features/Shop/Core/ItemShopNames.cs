@@ -2,6 +2,7 @@
 {
     public enum ItemShopNames
     {
-        ResetGameStats
+        ResetGameStats,
+        ResetLoseStat
     }
 }
