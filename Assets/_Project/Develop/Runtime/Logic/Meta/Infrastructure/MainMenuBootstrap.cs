@@ -57,20 +57,5 @@ namespace Assets._Project.Develop.Runtime.Meta.Infrastructure
                     Debug.Log($"Не хватает монет, нужно еще {resetGameStats.Price - _container.Resolve<WalletService>().GetCurrency(CurrencyTypes.Gold).Value}");
             }
         }
-
-        private void OnGUI()
-        {
-            GUI.Label(new Rect(10, 10, 100, 20), 
-                "Main Menu");
-            
-            GUI.Label(new Rect(10, 30, 100, 20), 
-                $"У вас монет: {_container.Resolve<WalletService>().GetCurrency(CurrencyTypes.Gold).Value}");
-            
-            GUI.Label(new Rect(10, 50, 100, 20), 
-                "Побед: " + _container.Resolve<GameProgressionStatsService>().WinCount.Value);
-            
-            GUI.Label(new Rect(10, 70, 100, 20), 
-                "Поражений: " + _container.Resolve<GameProgressionStatsService>().LoseCount.Value);
-        }
     }
 }

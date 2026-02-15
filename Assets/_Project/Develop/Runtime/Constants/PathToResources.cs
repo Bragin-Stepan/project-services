@@ -3,12 +3,16 @@ using System.Collections.Generic;
 using _Project.Develop.Runtime.Configs.Gameplay.Levels;
 using _Project.Develop.Runtime.Configs.Gameplay.Sequences;
 using _Project.Develop.Runtime.Configs.Meta;
+using _Project.Develop.Runtime.UI.Common;
+using _Project.Develop.Runtime.UI.Screens.Gameplay;
+using _Project.Develop.Runtime.UI.Screens.MainMenu;
 
 namespace Assets._Project.Develop.Runtime.Utilities.SceneManagement
 {
     public static class PathToResources
     {
         public static IReadOnlyDictionary<Type, string> ScriptableObject => _scriptableObject;
+        public static IReadOnlyDictionary<Type, string> UIPaths => _uiPaths;
         
         public static class Util
         {
@@ -20,6 +24,12 @@ namespace Assets._Project.Develop.Runtime.Utilities.SceneManagement
             public static class LoadingScreen
             {
                 public const string Standard = "Utilities/StandardLoadingScreen";
+            }
+            
+            public static class Screens
+            {
+                public const string MainMenu = "UI/Screens/MainMenu/MainMenuUIRoot";
+                public const string Gameplay = "UI/Screens/Gameplay/GameplayUIRoot";
             }
         }
         
@@ -35,6 +45,14 @@ namespace Assets._Project.Develop.Runtime.Utilities.SceneManagement
             
             { typeof(RewardsConfigSO), "Configs/Meta/Rewards/RewardsConfig" },
             { typeof(ItemsPriceConfigSO), "Configs/Meta/Shop/ItemsPriceConfig" },
+        };
+        
+        private static readonly Dictionary<Type, string> _uiPaths = new()
+        {
+            {typeof(MainMenuScreenView), "UI/Screens/MainMenu/MainMenuScreenView" },
+            {typeof(GameplayScreenView), "UI/Screens/Gameplay/GameplayScreenView" },
+
+            {typeof(IconTextView), "UI/Common/IconTextView" },
         };
     }
 }

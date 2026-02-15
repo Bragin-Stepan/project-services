@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using _Project.Develop.Runtime.Configs.Gameplay.Levels;
-using _Project.Develop.Runtime.Configs.Meta;
 using _Project.Develop.Runtime.Logic.Meta.Features;
-using _Project.Develop.Runtime.Logic.Meta.Features.Reward;
 using _Project.Develop.Runtime.Logic.Meta.Features.Wallet;
+using _Project.Develop.Runtime.UI;
+using _Project.Develop.Runtime.UI.Core;
 using _Project.Develop.Runtime.Utilities.GameMode;
 using _Project.Develop.Runtime.Utilities.InputManagement;
 using _Project.Develop.Runtime.Utils.ReactiveManagement;
@@ -30,14 +30,20 @@ namespace Assets._Project.Develop.Runtime.Infrastructure.EntryPoint
             container.RegisterAsSingle(CreateResourcesAssetsLoader);
             container.RegisterAsSingle(CreateSceneLoaderService);
             container.RegisterAsSingle(CreateSceneSwitcherService);
+            
             container.RegisterAsSingle(CreateGameProgressionStatsService).NonLazy();
             container.RegisterAsSingle(CreateGameModeRunner);
-            container.RegisterAsSingle(CreateSaveLoadFactory);
-            container.RegisterAsSingle<ILoadingScreen>(CreateLoadingScreen);
             container.RegisterAsSingle<IPlayerInputService>(CreateDesktopPlayerInputService);
+            
+            container.RegisterAsSingle(CreateSaveLoadFactory);
             container.RegisterAsSingle<ISaveLoadService>(CreateSaveLoadService);
-            container.RegisterAsSingle(CreateWalletService).NonLazy();
             container.RegisterAsSingle(CreatePlayerDataProvider);
+            
+            container.RegisterAsSingle(CreateWalletService).NonLazy();
+            
+            container.RegisterAsSingle(CreateProjectPresentersFactory);
+            container.RegisterAsSingle(CreateViewsFactory);
+            container.RegisterAsSingle<ILoadingScreen>(CreateLoadingScreen);
         }
         
         private static ConfigsProviderService CreateConfigsProviderService(DIContainer c)
@@ -68,6 +74,12 @@ namespace Assets._Project.Develop.Runtime.Infrastructure.EntryPoint
         
         private static PlayerDataProvider CreatePlayerDataProvider(DIContainer c)
             => new(c.Resolve<ISaveLoadService>(), c.Resolve<ConfigsProviderService>());
+        
+        private static ProjectPresentersFactory CreateProjectPresentersFactory(DIContainer c)
+            => new(c);
+        
+        private static ViewsFactory CreateViewsFactory(DIContainer c)
+            => new(c.Resolve<ResourcesAssetsLoader>());
         
         private static GameProgressionStatsService CreateGameProgressionStatsService(DIContainer c)
             => new (c.Resolve<PlayerDataProvider>());
