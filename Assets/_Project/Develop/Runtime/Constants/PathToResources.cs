@@ -45,6 +45,7 @@ namespace Assets._Project.Develop.Runtime.Utilities.SceneManagement
             
             { typeof(RewardsConfigSO), "Configs/Meta/Rewards/RewardsConfig" },
             { typeof(ItemsPriceConfigSO), "Configs/Meta/Shop/ItemsPriceConfig" },
+            { typeof(ProgressStatIconsConfigSO), "Configs/Meta/Stats/ProgressStatIconsConfig" },
         };
         
         private static readonly Dictionary<Type, string> _uiPaths = new()

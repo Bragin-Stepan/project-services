@@ -1,5 +1,6 @@
-﻿using Assets._Project.Develop.Runtime.Gameplay.Infrastructure;
+﻿using _Project.Develop.Runtime.Logic.Meta.Features;
 using Assets._Project.Develop.Runtime.Infrastructure.DI;
+using Assets._Project.Develop.Runtime.Meta.Features.Wallet;
 
 namespace _Project.Develop.Runtime.UI.Screens.Gameplay
 {
@@ -16,6 +17,7 @@ namespace _Project.Develop.Runtime.UI.Screens.Gameplay
         {
             return new GameplayScreenPresenter(
                 view, 
+                _container.Resolve<WalletService>(),
                 _container.Resolve<GameplayPresentersFactory>(),
                 _container.Resolve<ProjectPresentersFactory>());
         }

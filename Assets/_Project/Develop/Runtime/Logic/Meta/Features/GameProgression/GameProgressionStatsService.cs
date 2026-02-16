@@ -1,4 +1,7 @@
-﻿using _Project.Develop.Runtime.Utils.ReactiveManagement;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using _Project.Develop.Runtime.Utils.ReactiveManagement;
 using Assets._Project.Develop.Runtime.Utilities.DataManagement;
 using Assets._Project.Develop.Runtime.Utilities.DataManagement.DataProviders;
 
@@ -6,37 +9,63 @@ namespace _Project.Develop.Runtime.Logic.Meta.Features
 {
     public class GameProgressionStatsService : IDataReader<PlayerData>, IDataWriter<PlayerData>
     {
-        private ReactiveVariable<int> _winCount = new (0);
-        private ReactiveVariable<int> _loseCount = new (0);
+        private readonly Dictionary<ProgressStatTypes, ReactiveVariable<int>> _stats;
 
-        public GameProgressionStatsService(PlayerDataProvider playerDataProvider)
+        public GameProgressionStatsService(
+            Dictionary<ProgressStatTypes, ReactiveVariable<int>> stats, 
+            PlayerDataProvider playerDataProvider)
         {
+            _stats = new Dictionary<ProgressStatTypes, ReactiveVariable<int>>(stats);
+            
             playerDataProvider.RegisterWriter(this);
             playerDataProvider.RegisterReader(this);
         }
         
-        public IReadOnlyVariable<int> WinCount => _winCount;
+        public List<ProgressStatTypes> AvailableStats => _stats.Keys.ToList();
         
-        public IReadOnlyVariable<int> LoseCount => _loseCount;
+        public IReadOnlyVariable<int> GetStat(ProgressStatTypes type) => _stats[type];
 
-        public void IncrementWinCount() => _winCount.Value += 1;
+        public void Reset(ProgressStatTypes type)
+        {
+            _stats[type].Value = 0;
+        }
+
+        public void Add(ProgressStatTypes type, int amount = 1)
+        {
+            if (amount < 0)
+                throw new ArgumentOutOfRangeException(nameof(amount));
         
-        public void IncrementLoseCount() => _loseCount.Value += 1;
+            _stats[type].Value += amount;
+        }
         
-        public void ResetWinCount() => _winCount.Value = 0;
+        public void Remove(ProgressStatTypes type, int amount = 1)
+        {
+            if (amount < 0)
+                throw new ArgumentOutOfRangeException(nameof(amount));
         
-        public void ResetLoseCount() => _loseCount.Value = 0;
+            _stats[type].Value -= amount;
+        }
 
         public void ReadFrom(PlayerData data)
         {
-            _winCount.Value = data.WinCount;
-            _loseCount.Value = data.LoseCount;
+            foreach (KeyValuePair<ProgressStatTypes, int> currency in data.StatsData)
+            {
+                if (_stats.ContainsKey(currency.Key))
+                    _stats[currency.Key].Value = currency.Value;
+                else
+                    _stats.Add(currency.Key, new ReactiveVariable<int>(currency.Value));
+            }
         }
 
         public void WriteTo(PlayerData data)
         {
-            data.WinCount = _winCount.Value;
-            data.LoseCount = _loseCount.Value;
+            foreach (KeyValuePair<ProgressStatTypes, ReactiveVariable<int>> currency in _stats)
+            {
+                if (data.StatsData.ContainsKey(currency.Key))
+                    data.StatsData[currency.Key] = currency.Value.Value;
+                else
+                    data.StatsData.Add(currency.Key, currency.Value.Value);
+            }
         }
     }
 }

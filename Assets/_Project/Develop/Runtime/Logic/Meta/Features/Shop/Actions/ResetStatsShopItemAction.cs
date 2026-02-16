@@ -11,8 +11,8 @@ namespace _Project.Develop.Runtime.Logic.Meta.Features.Shop
         
         public void Activate()
         {
-            _stats.ResetWinCount();
-            _stats.ResetLoseCount();
+            _stats.Reset(ProgressStatTypes.Win);
+            _stats.Reset(ProgressStatTypes.Lose);
         }
     }
 }

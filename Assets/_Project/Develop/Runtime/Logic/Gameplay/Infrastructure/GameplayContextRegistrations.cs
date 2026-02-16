@@ -69,8 +69,8 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
 
         private static GameplayScreenPresenter CreateGameplayScreenPresenter(DIContainer c)
         {
-            c.Resolve<GameplayUIRoot>();
-            GameplayScreenView view = c.Resolve<ViewsFactory>().Create<GameplayScreenView>();
+            GameplayUIRoot uiRoot = c.Resolve<GameplayUIRoot>();
+            GameplayScreenView view = c.Resolve<ViewsFactory>().Create<GameplayScreenView>(uiRoot.HUDLayer);
             
             return c.Resolve<GameplayPresentersFactory>().CreateGameplayScreenPresenter(view);
         }

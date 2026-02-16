@@ -80,9 +80,6 @@ namespace Assets._Project.Develop.Runtime.Infrastructure.EntryPoint
         
         private static ViewsFactory CreateViewsFactory(DIContainer c)
             => new(c.Resolve<ResourcesAssetsLoader>());
-        
-        private static GameProgressionStatsService CreateGameProgressionStatsService(DIContainer c)
-            => new (c.Resolve<PlayerDataProvider>());
 
         private static SaveLoadService CreateSaveLoadService(DIContainer c)
             => c.Resolve<SaveLoadFactory>().CreateDefaultSaveLoad();
@@ -105,6 +102,16 @@ namespace Assets._Project.Develop.Runtime.Infrastructure.EntryPoint
                 .Load<StandardLoadingScreen>(PathToResources.UI.LoadingScreen.Standard);
 
             return Object.Instantiate(standardLoadingScreenPrefab);
+        }
+
+        private static GameProgressionStatsService CreateGameProgressionStatsService(DIContainer c)
+        {
+            Dictionary<ProgressStatTypes, ReactiveVariable<int>> stats = new();
+
+            foreach (ProgressStatTypes type in Enum.GetValues(typeof(ProgressStatTypes)))
+                stats[type] = new ReactiveVariable<int>();
+
+            return new GameProgressionStatsService(stats, c.Resolve<PlayerDataProvider>());
         }
         
         private static WalletService CreateWalletService(DIContainer c)

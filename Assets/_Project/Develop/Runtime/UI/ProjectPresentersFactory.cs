@@ -1,7 +1,9 @@
 ﻿using _Project.Develop.Runtime.Configs.Meta;
+using _Project.Develop.Runtime.Logic.Meta.Features;
 using _Project.Develop.Runtime.Logic.Meta.Features.Wallet;
 using _Project.Develop.Runtime.UI.Common;
 using _Project.Develop.Runtime.UI.Core;
+using _Project.Develop.Runtime.UI.Features.StatsProgression;
 using _Project.Develop.Runtime.UI.Features.Wallet;
 using _Project.Develop.Runtime.Utils.ReactiveManagement;
 using Assets._Project.Develop.Runtime.Infrastructure.DI;
@@ -37,6 +39,27 @@ namespace _Project.Develop.Runtime.UI
         {
             return new WalletPresenter(
                 _container.Resolve<WalletService>(),
+                this,
+                _container.Resolve<ViewsFactory>(),
+                view);
+        }
+        
+        public StatProgressPresenter CreateStatProgressPresenter(
+            IconTextView view,
+            IReadOnlyVariable<int> stat,
+            ProgressStatTypes type)
+        {
+            return new StatProgressPresenter(
+                stat,
+                type,
+                _container.Resolve<ConfigsProviderService>().GetConfig<ProgressStatIconsConfigSO>(),
+                view);
+        }
+        
+        public StatListProgressPresenter CreateStatListProgressPresenter(IconTextListView view)
+        {
+            return new StatListProgressPresenter(
+                _container.Resolve<GameProgressionStatsService>(),
                 this,
                 _container.Resolve<ViewsFactory>(),
                 view);

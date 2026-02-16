@@ -44,13 +44,13 @@ namespace _Project.Develop.Runtime.Logic.Gameplay.Features.States
             base.OnEnter();
             
             _walletService.Add(CurrencyTypes.Gold, _rewardService.GetRewardFor(RewardTypes.Win));
-            _gameProgressionStatsService.IncrementWinCount();
+            _gameProgressionStatsService.Add(ProgressStatTypes.Win);
             _coroutinesPerformer.StartPerform(_playerDataProvider.SaveAsync());
             
             Debug.Log("Добавили: " + _rewardService.GetRewardFor(RewardTypes.Win) + " монет");
             Debug.Log("Кошелек: " + _walletService.GetCurrency(CurrencyTypes.Gold) + " монет");
-            Debug.Log($"Ваш счет: {_gameProgressionStatsService.LoseCount.Value} поражений и {_gameProgressionStatsService.WinCount.Value} побед");
-            
+            Debug.Log($"Ваш счет: {_gameProgressionStatsService.GetStat(ProgressStatTypes.Lose).Value} поражений и {_gameProgressionStatsService.GetStat(ProgressStatTypes.Win).Value} побед");
+
             Debug.Log("Вы выйграли");
             Debug.Log("=== Нажмите пробел для выхода из игры ===");
 

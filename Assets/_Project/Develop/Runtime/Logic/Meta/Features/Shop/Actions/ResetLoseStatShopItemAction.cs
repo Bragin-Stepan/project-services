@@ -11,7 +11,7 @@
         
         public void Activate()
         {
-            _stats.ResetLoseCount();
+            _stats.Reset(ProgressStatTypes.Lose);
         }
     }
 }

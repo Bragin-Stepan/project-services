@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using _Project.Develop.Runtime.Configs.Meta;
+using _Project.Develop.Runtime.Logic.Meta.Features;
 using _Project.Develop.Runtime.Logic.Meta.Features.Wallet;
 using Assets._Project.Develop.Runtime.Utilities.ConfigsManagement;
 
@@ -22,21 +23,30 @@ namespace Assets._Project.Develop.Runtime.Utilities.DataManagement.DataProviders
             return new PlayerData()
             {
                 WalletData = InitWalletData(),
-                WinCount = 0,
-                LoseCount = 0
+                StatsData = InitStatsData()
             };
         }
 
         private Dictionary<CurrencyTypes, int> InitWalletData()
         {
-            Dictionary<CurrencyTypes, int> walletData = new();
+            Dictionary<CurrencyTypes, int> data = new();
 
-            StartWalletConfigSO walletConfig = _configsProviderService.GetConfig<StartWalletConfigSO>();
+            StartWalletConfigSO config = _configsProviderService.GetConfig<StartWalletConfigSO>();
 
-            foreach (CurrencyTypes currencyType in Enum.GetValues(typeof(CurrencyTypes)))
-                walletData[currencyType] = walletConfig.GetValueFor(currencyType);
+            foreach (CurrencyTypes type in Enum.GetValues(typeof(CurrencyTypes)))
+                data[type] = config.GetValueFor(type);
 
-            return walletData;
+            return data;
+        }
+        
+        private Dictionary<ProgressStatTypes, int> InitStatsData()
+        {
+            Dictionary<ProgressStatTypes, int> data = new();
+            
+            foreach (ProgressStatTypes type in Enum.GetValues(typeof(CurrencyTypes)))
+                data[type] = 0;
+
+            return data;
         }
     }
 }
