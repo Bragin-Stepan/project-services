@@ -1,6 +1,6 @@
 ﻿namespace _Project.Develop.Runtime.Logic.Meta.Features.Shop
 {
-    public class ResetLoseStatShopItemAction : IBuyableAction
+    public class ResetLoseStatShopItemAction : IPurchaseEffect
     {
         private readonly GameProgressionStatsService _stats;
 

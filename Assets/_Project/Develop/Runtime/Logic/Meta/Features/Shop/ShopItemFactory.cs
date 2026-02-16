@@ -20,7 +20,7 @@ namespace _Project.Develop.Runtime.Logic.Meta.Features.Shop
         {
             int price = _config.GetValueFor(name);
             CurrencyTypes currency = _config.GetCurrencyFor(name);
-            IBuyableAction action = _actionFactory.Create(name);
+            IPurchaseEffect action = _actionFactory.Create(name);
 
             return new ShopItem(price, currency, name, action);
         }

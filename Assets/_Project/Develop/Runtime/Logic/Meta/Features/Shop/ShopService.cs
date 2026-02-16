@@ -67,10 +67,9 @@ namespace _Project.Develop.Runtime.Logic.Meta.Features.Shop
             
             _wallet.Spend(item.Currency, item.Price);
             
-            item.Action.Activate();
+            item.Effect.Activate();
             ItemBought?.Invoke(item);
 
-            // в играх обычно принято сохранять прямо в самом магазине? Или это делает отдельный сервис который отслеживает покупку?
             _coroutinesPerformer.StartPerform(_playerData.SaveAsync());
             
             return true;

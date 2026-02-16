@@ -12,12 +12,12 @@ namespace _Project.Develop.Runtime.Logic.Meta.Features.Shop
             _progressionStats = container.Resolve<GameProgressionStatsService>();
         }
 
-        public IBuyableAction Create(ItemShopNames name)
+        public IPurchaseEffect Create(ItemShopNames name)
         {
             return name switch
             {
                 ItemShopNames.ResetGameStats => new ResetStatsShopItemAction(_progressionStats),
-                ItemShopNames.ResetLoseStat => new ResetLoseStatShopItemAction(_progressionStats), // Просто как пример
+                ItemShopNames.ResetLoseStat => new ResetLoseStatShopItemAction(_progressionStats),
                 _ => throw new ArgumentOutOfRangeException(nameof(name), name, null)
             };
         }
