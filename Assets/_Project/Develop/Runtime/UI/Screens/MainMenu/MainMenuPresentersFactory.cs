@@ -1,4 +1,5 @@
-﻿using Assets._Project.Develop.Runtime.Infrastructure.DI;
+﻿using _Project.Develop.Runtime.Logic.Meta.Features.Shop;
+using Assets._Project.Develop.Runtime.Infrastructure.DI;
 
 namespace _Project.Develop.Runtime.UI.Screens.MainMenu
 {
@@ -15,6 +16,7 @@ namespace _Project.Develop.Runtime.UI.Screens.MainMenu
         {
             return new MainMenuScreenPresenter(
                 view,
+                _container.Resolve<ShopService>(),
                 _container.Resolve<ProjectPresentersFactory>(),
                 _container.Resolve<MainMenuPopupService>());
         }

@@ -61,6 +61,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <WalletView>k__BackingField: {fileID: 8828111096790147031}
   _openLevelsMenuButton: {fileID: 7359744510390969298}
+  _resetStatsButton: {fileID: 8525606736321382741}
 --- !u!1 &624857811143853301
 GameObject:
   m_ObjectHideFlags: 0
