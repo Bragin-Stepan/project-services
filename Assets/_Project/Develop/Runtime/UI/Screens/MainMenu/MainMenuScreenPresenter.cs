@@ -55,7 +55,7 @@ namespace _Project.Develop.Runtime.UI.Screens.MainMenu
 
         private void OnOpenLevelsMenuButtonClicked()
         {
-            // _popupService.OpenLevelsMenuPopup();
+            _popupService.OpenLevelsMenuPopup();
         }
     }
 }

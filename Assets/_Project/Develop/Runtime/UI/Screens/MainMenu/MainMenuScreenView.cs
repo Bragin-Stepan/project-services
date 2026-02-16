@@ -2,6 +2,7 @@
 using _Project.Develop.Runtime.UI.Common;
 using _Project.Develop.Runtime.UI.Core;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace _Project.Develop.Runtime.UI.Screens.MainMenu
 {
@@ -11,16 +12,16 @@ namespace _Project.Develop.Runtime.UI.Screens.MainMenu
 
         [field: SerializeField] public IconTextListView WalletView { get; private set; }
 
-        // [SerializeField] private Button _openLevelsMenuButton;
+        [SerializeField] private Button _openLevelsMenuButton;
 
         private void OnEnable()
         {
-            // _openLevelsMenuButton.onClick.AddListener(OnOpenLevelsMenuButtonClicked);
+            _openLevelsMenuButton.onClick.AddListener(OnOpenLevelsMenuButtonClicked);
         }
 
         private void OnDisable()
         {
-            // _openLevelsMenuButton.onClick.RemoveListener(OnOpenLevelsMenuButtonClicked);
+            _openLevelsMenuButton.onClick.RemoveListener(OnOpenLevelsMenuButtonClicked);
         }
 
         private void OnOpenLevelsMenuButtonClicked() => OpenLevelsMenuButtonClicked?.Invoke();

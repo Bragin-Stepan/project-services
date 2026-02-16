@@ -4,6 +4,7 @@ using _Project.Develop.Runtime.Configs.Gameplay.Levels;
 using _Project.Develop.Runtime.Configs.Gameplay.Sequences;
 using _Project.Develop.Runtime.Configs.Meta;
 using _Project.Develop.Runtime.UI.Common;
+using _Project.Develop.Runtime.UI.Features.LevelsMenuPopup;
 using _Project.Develop.Runtime.UI.Screens.Gameplay;
 using _Project.Develop.Runtime.UI.Screens.MainMenu;
 
@@ -52,6 +53,9 @@ namespace Assets._Project.Develop.Runtime.Utilities.SceneManagement
         {
             {typeof(MainMenuScreenView), "UI/Screens/MainMenu/MainMenuScreenView" },
             {typeof(GameplayScreenView), "UI/Screens/Gameplay/GameplayScreenView" },
+            
+            {typeof(LevelTileView), "UI/LevelsMenuPopup/LevelTile" }, //?
+            {typeof(LevelsMenuPopupView), "UI/LevelsMenuPopup/LevelsMenuPopup" }, //?
 
             {typeof(IconTextView), "UI/Common/IconTextView" },
         };

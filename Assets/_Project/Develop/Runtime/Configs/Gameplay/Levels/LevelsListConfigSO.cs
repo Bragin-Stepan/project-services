@@ -12,6 +12,8 @@ namespace _Project.Develop.Runtime.Configs.Gameplay.Levels
     public class LevelsListConfigSO : ScriptableObject
     {
         [SerializeField] private LevelsConfig[] _list;
+        
+        public IReadOnlyList<LevelsConfig> Levels => _list;
 
         public LevelConfigSO[] GetBy(GameModeType gameModeType) 
             => _list.FirstOrDefault(configs => configs != null && configs.GameModeType == gameModeType)?.Levels;
