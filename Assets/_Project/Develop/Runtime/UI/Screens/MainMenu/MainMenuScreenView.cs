@@ -12,6 +12,7 @@ namespace _Project.Develop.Runtime.UI.Screens.MainMenu
         public event Action ResetStatsButtonClicked;
 
         [field: SerializeField] public IconTextListView WalletView { get; private set; }
+        [field: SerializeField] public IconTextListView StatsView { get; private set; }
 
         [SerializeField] private Button _openLevelsMenuButton;
         [SerializeField] private Button _resetStatsButton;

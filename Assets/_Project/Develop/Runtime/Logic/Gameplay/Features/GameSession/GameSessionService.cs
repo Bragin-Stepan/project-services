@@ -58,7 +58,6 @@ namespace _Project.Develop.Runtime.Logic.Gameplay.Features.GameSession
             
             if (_currentInput.Count > _sequence.Count || _sequence.ElementAt(_currentInput.Count - 1).Value != input)
             {
-                Debug.Log($"ОШИБКА! Ожидалось: {_sequence[_currentInput.Count - 1]}");
                 _isCompleted = true;
                 GameDefeat?.Invoke();
                 return;

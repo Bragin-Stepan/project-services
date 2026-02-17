@@ -14,7 +14,6 @@ namespace _Project.Develop.Runtime.Logic.Gameplay.Features.States
 {
     public class GameplayStateWin : State
     {
-        private readonly SceneSwitcherService _sceneSwitcherService;
         private readonly WalletService _walletService;
         private readonly PlayerDataProvider _playerDataProvider;
         private readonly GameProgressionStatsService _gameProgressionStatsService;
@@ -23,7 +22,6 @@ namespace _Project.Develop.Runtime.Logic.Gameplay.Features.States
         private readonly GameplayPopupService _popupService;
         
         public GameplayStateWin(
-            SceneSwitcherService sceneSwitcherService,
             WalletService walletService,
             GameProgressionStatsService gameProgressionStatsService,
             PlayerDataProvider playerDataProvider,
@@ -32,7 +30,6 @@ namespace _Project.Develop.Runtime.Logic.Gameplay.Features.States
             GameplayPopupService popupService)
         {
             _gameProgressionStatsService = gameProgressionStatsService;
-            _sceneSwitcherService = sceneSwitcherService;
             _coroutinesPerformer = coroutinesPerformer;
             _playerDataProvider = playerDataProvider;
             _walletService = walletService;
@@ -47,14 +44,7 @@ namespace _Project.Develop.Runtime.Logic.Gameplay.Features.States
             _walletService.Add(CurrencyTypes.Gold, _rewardService.GetRewardFor(RewardTypes.Win));
             _gameProgressionStatsService.Add(ProgressStatTypes.Win);
             _coroutinesPerformer.StartPerform(_playerDataProvider.SaveAsync());
-            
-            Debug.Log("Добавили: " + _rewardService.GetRewardFor(RewardTypes.Win) + " монет"); // Перевести в UI
-            Debug.Log("Кошелек: " + _walletService.GetCurrency(CurrencyTypes.Gold).Value + " монет");
-            Debug.Log($"Ваш счет: {_gameProgressionStatsService.GetStat(ProgressStatTypes.Lose).Value} поражений и {_gameProgressionStatsService.GetStat(ProgressStatTypes.Win).Value} побед");
 
-            Debug.Log("Вы выйграли");
-            Debug.Log("=== Нажмите пробел для выхода из игры ===");
-            
             _popupService.OpenWinPopup();
         }
     }

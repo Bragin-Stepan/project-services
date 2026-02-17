@@ -7,7 +7,6 @@ using Assets._Project.Develop.Runtime.Infrastructure.DI;
 using Assets._Project.Develop.Runtime.Meta.Features.Wallet;
 using Assets._Project.Develop.Runtime.Utilities.CoroutinesManagement;
 using Assets._Project.Develop.Runtime.Utilities.DataManagement.DataProviders;
-using Assets._Project.Develop.Runtime.Utilities.SceneManagement;
 
 namespace _Project.Develop.Runtime.Logic.Gameplay.Features.States
 {
@@ -29,7 +28,6 @@ namespace _Project.Develop.Runtime.Logic.Gameplay.Features.States
         public GameplayStateWin CreateWin()
         {
             return new GameplayStateWin(
-                _container.Resolve<SceneSwitcherService>(),
                 _container.Resolve<WalletService>(),
                 _container.Resolve<GameProgressionStatsService>(),
                 _container.Resolve<PlayerDataProvider>(),

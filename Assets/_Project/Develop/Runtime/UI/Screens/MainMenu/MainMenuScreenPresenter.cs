@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using _Project.Develop.Runtime.Logic.Meta.Features.Shop;
 using _Project.Develop.Runtime.UI.Core;
+using _Project.Develop.Runtime.UI.Features.StatsProgression;
 using _Project.Develop.Runtime.UI.Features.Wallet;
 using UnityEngine;
 
@@ -34,6 +35,7 @@ namespace _Project.Develop.Runtime.UI.Screens.MainMenu
             _screen.ResetStatsButtonClicked += OnResetStatsButtonClicked;
 
             CreateWallet();
+            CreateStatList();
 
             foreach (IPresenter presenter in _childPresenters)
                 presenter.Initialize();
@@ -53,8 +55,13 @@ namespace _Project.Develop.Runtime.UI.Screens.MainMenu
         private void CreateWallet()
         {
             WalletPresenter walletPresenter = _projectPresentersFactory.CreateWalletPresenter(_screen.WalletView);
-
             _childPresenters.Add(walletPresenter);
+        }
+        
+        private void CreateStatList()
+        {
+            StatListProgressPresenter presenter = _projectPresentersFactory.CreateStatListProgressPresenter(_screen.StatsView);
+            _childPresenters.Add(presenter);
         }
 
         private void OnOpenLevelsMenuButtonClicked()
