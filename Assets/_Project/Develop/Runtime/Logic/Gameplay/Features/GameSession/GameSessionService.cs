@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using _Project.Develop.Runtime.Logic.Gameplay.Features.Sequence;
 using _Project.Develop.Runtime.Utilities.InputManagement;
 using Assets._Project.Develop.Runtime.Gameplay.Infrastructure;
@@ -9,14 +10,14 @@ namespace _Project.Develop.Runtime.Logic.Gameplay.Features.GameSession
 {
     public class GameSessionService
     {
-         public event Action GameWon;
-        public event Action GameLost;
+        public event Action GameWon;
+        public event Action GameDefeat;
         
         private readonly SequenceFactory _sequenceFactory;
         private readonly IPlayerInputService _playerInput;
 
         private GameplayInputArgs _args;
-        private string[] _sequence;
+        private List<SequenceNodeInfo> _sequence = new();
         private List<string> _currentInput = new();
         private bool _isCompleted;
 
@@ -25,6 +26,9 @@ namespace _Project.Develop.Runtime.Logic.Gameplay.Features.GameSession
             _sequenceFactory = sequenceFactory;
             _playerInput = playerInput;
         }
+        
+        public Dictionary<string, bool> Sequence 
+            => _sequence.ToDictionary(x => x.Value, x => x.IsCorrect);
 
         public void StartGame(GameplayInputArgs args)
         {
@@ -33,12 +37,13 @@ namespace _Project.Develop.Runtime.Logic.Gameplay.Features.GameSession
             Reset();
             
             Debug.Log("=== Запуск игры ===");
+     
+            foreach (string item in _sequenceFactory.Create(_args.SequenceCount, _args.GameModeType))
+                _sequence.Add(new SequenceNodeInfo(item, false));
             
-            _sequence = _sequenceFactory.Create(_args.SequenceCount, _args.GameModeType);
+            Debug.Log($"Сгенерировано {_sequence.Count} элементов:");
             
-            Debug.Log($"Сгенерировано {_sequence.Length} элементов:");
-            
-            foreach (string value in _sequence)
+            foreach (string value in _sequence.Select(x => x.Value)) // Перевести в UI
                 Debug.Log(value);
         }
 
@@ -52,18 +57,19 @@ namespace _Project.Develop.Runtime.Logic.Gameplay.Features.GameSession
                 return;
 
             _currentInput.Add(input);
-            Debug.Log($"Ваш ввод: {input}");
+            Debug.Log($"Ваш ввод: {input}"); // Перевести в UI
 
-            if (_currentInput.Count > _sequence.Length || 
-                !_sequence[_currentInput.Count - 1].Equals(input))
+            if (_currentInput.Count > _sequence.Count || _sequence.ElementAt(_currentInput.Count - 1).Value != input)
             {
                 Debug.Log($"ОШИБКА! Ожидалось: {_sequence[_currentInput.Count - 1]}");
                 _isCompleted = true;
-                GameLost?.Invoke();
+                GameDefeat?.Invoke();
                 return;
             }
+            
+            _sequence.ElementAt(_currentInput.Count - 1).IsCorrect = true;
 
-            if (_currentInput.Count == _sequence.Length)
+            if (_currentInput.Count == _sequence.Count)
             {
                 _isCompleted = true;
                 GameWon?.Invoke();
@@ -72,9 +78,21 @@ namespace _Project.Develop.Runtime.Logic.Gameplay.Features.GameSession
 
         public void Reset()
         {
-            _sequence = null;
+            _sequence.Clear();
             _currentInput.Clear();
             _isCompleted = false;
+        }
+
+        private class SequenceNodeInfo
+        {
+            public string Value;
+            public bool IsCorrect;
+            
+            public SequenceNodeInfo(string value, bool isCorrect)
+            {
+                Value = value;
+                IsCorrect = isCorrect;
+            }
         }
     }
 }

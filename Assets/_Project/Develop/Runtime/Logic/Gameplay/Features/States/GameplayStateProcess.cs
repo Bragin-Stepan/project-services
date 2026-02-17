@@ -25,7 +25,7 @@ namespace _Project.Develop.Runtime.Logic.Gameplay.Features.States
             base.OnEnter();
             
             _gameSession.GameWon += OnGameWon;
-            _gameSession.GameLost += OnGameLost;
+            _gameSession.GameDefeat += OnGameDefeat;
             _gameSession.StartGame(_args);
         }
 
@@ -41,12 +41,12 @@ namespace _Project.Develop.Runtime.Logic.Gameplay.Features.States
             if (_gameSession != null)
             {
                 _gameSession.GameWon -= OnGameWon;
-                _gameSession.GameLost -= OnGameLost;
+                _gameSession.GameDefeat -= OnGameDefeat;
                 _gameSession.Reset();
             }
         }
 
         private void OnGameWon() => _stateChanger.ChangeState<GameplayStateWin>();
-        private void OnGameLost() => _stateChanger.ChangeState<GameplayStateDefeat>();
+        private void OnGameDefeat() => _stateChanger.ChangeState<GameplayStateDefeat>();
     }
 }

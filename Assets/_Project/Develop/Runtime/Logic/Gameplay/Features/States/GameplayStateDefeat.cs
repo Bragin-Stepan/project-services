@@ -46,7 +46,7 @@ namespace _Project.Develop.Runtime.Logic.Gameplay.Features.States
             _gameProgressionStatsService.Add(ProgressStatTypes.Lose);
             _coroutinesPerformer.StartPerform(_playerDataProvider.SaveAsync());
             
-            Debug.Log("Забрали: " + _rewardService.GetRewardFor(RewardTypes.Lose) + " монет");
+            Debug.Log("Забрали: " + _rewardService.GetRewardFor(RewardTypes.Lose) + " монет"); // Перевести в UI
             Debug.Log("Кошелек: " + _walletService.GetCurrency(CurrencyTypes.Gold) + " монет");
             Debug.Log($"Ваш счет: {_gameProgressionStatsService.GetStat(ProgressStatTypes.Lose).Value} поражений и {_gameProgressionStatsService.GetStat(ProgressStatTypes.Win).Value} побед");
             
