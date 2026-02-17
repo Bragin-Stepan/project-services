@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using _Project.Develop.Runtime.Logic.Gameplay.Features.Sequence;
+using _Project.Develop.Runtime.Utilities.GameMode;
 using _Project.Develop.Runtime.Utilities.InputManagement;
 using Assets._Project.Develop.Runtime.Gameplay.Infrastructure;
 using UnityEngine;
@@ -28,6 +29,8 @@ namespace _Project.Develop.Runtime.Logic.Gameplay.Features.GameSession
             _playerInput = playerInput;
         }
         
+        public GameModeType GameModeType => _args.GameModeType;
+        
         public List<ISequenceTileInfo> Sequence => _sequence.Cast<ISequenceTileInfo>().ToList();
 
         public void StartGame(GameplayInputArgs args)
@@ -36,16 +39,9 @@ namespace _Project.Develop.Runtime.Logic.Gameplay.Features.GameSession
             
             Reset();
             
-            Debug.Log("=== Запуск игры ===");
-     
             foreach (string item in _sequenceFactory.Create(_args.SequenceCount, _args.GameModeType))
                 _sequence.Add(new SequenceTileInfo(item));
-            
-            Debug.Log($"Сгенерировано {_sequence.Count} элементов:");
-            
-            foreach (string value in _sequence.Select(x => x.Value)) // Перевести в UI
-                Debug.Log(value);
-            
+
             SessionStart?.Invoke();
         }
 
@@ -59,8 +55,7 @@ namespace _Project.Develop.Runtime.Logic.Gameplay.Features.GameSession
                 return;
 
             _currentInput.Add(input);
-            Debug.Log($"Ваш ввод: {input}"); // Перевести в UI
-
+            
             if (_currentInput.Count > _sequence.Count || _sequence.ElementAt(_currentInput.Count - 1).Value != input)
             {
                 Debug.Log($"ОШИБКА! Ожидалось: {_sequence[_currentInput.Count - 1]}");

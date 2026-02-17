@@ -1,6 +1,7 @@
 ﻿using _Project.Develop.Runtime.Logic.Meta.Features;
 using _Project.Develop.Runtime.Logic.Meta.Features.Reward;
 using _Project.Develop.Runtime.Logic.Meta.Features.Wallet;
+using _Project.Develop.Runtime.UI.Screens.Gameplay;
 using _Project.Develop.Runtime.Utilities.InputManagement;
 using _Project.Develop.Runtime.Utilities.StateMachine;
 using Assets._Project.Develop.Runtime.Meta.Features.Wallet;
@@ -19,7 +20,7 @@ namespace _Project.Develop.Runtime.Logic.Gameplay.Features.States
         private readonly GameProgressionStatsService _gameProgressionStatsService;
         private readonly RewardService _rewardService;
         private readonly ICoroutinesPerformer _coroutinesPerformer;
-        private readonly IPlayerInputService _playerInput;
+        private readonly GameplayPopupService _popupService;
         
         public GameplayStateWin(
             SceneSwitcherService sceneSwitcherService,
@@ -28,7 +29,7 @@ namespace _Project.Develop.Runtime.Logic.Gameplay.Features.States
             PlayerDataProvider playerDataProvider,
             RewardService rewardService,
             ICoroutinesPerformer coroutinesPerformer,
-            IPlayerInputService playerInput)
+            GameplayPopupService popupService)
         {
             _gameProgressionStatsService = gameProgressionStatsService;
             _sceneSwitcherService = sceneSwitcherService;
@@ -36,7 +37,7 @@ namespace _Project.Develop.Runtime.Logic.Gameplay.Features.States
             _playerDataProvider = playerDataProvider;
             _walletService = walletService;
             _rewardService = rewardService;
-            _playerInput = playerInput;
+            _popupService = popupService;
         }
     
         public override void OnEnter()
@@ -53,18 +54,8 @@ namespace _Project.Develop.Runtime.Logic.Gameplay.Features.States
 
             Debug.Log("Вы выйграли");
             Debug.Log("=== Нажмите пробел для выхода из игры ===");
-
-            _playerInput.OnJump += OnJumpPressed;
-        }
-        
-        public override void OnExit()
-        {
-            base.OnExit();
             
-            _playerInput.OnJump -= OnJumpPressed;
+            _popupService.OpenWinPopup();
         }
-        
-        private void OnJumpPressed() => _coroutinesPerformer.StartPerform(
-            _sceneSwitcherService.ProcessSwitchTo(Scenes.MainMenu));
     }
 }

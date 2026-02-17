@@ -1,7 +1,7 @@
 ﻿using _Project.Develop.Runtime.Logic.Gameplay.Features.GameSession;
 using _Project.Develop.Runtime.Logic.Meta.Features;
 using _Project.Develop.Runtime.Logic.Meta.Features.Reward;
-using _Project.Develop.Runtime.Utilities.InputManagement;
+using _Project.Develop.Runtime.UI.Screens.Gameplay;
 using Assets._Project.Develop.Runtime.Gameplay.Infrastructure;
 using Assets._Project.Develop.Runtime.Infrastructure.DI;
 using Assets._Project.Develop.Runtime.Meta.Features.Wallet;
@@ -35,19 +35,18 @@ namespace _Project.Develop.Runtime.Logic.Gameplay.Features.States
                 _container.Resolve<PlayerDataProvider>(),
                 _container.Resolve<RewardService>(),
                 _container.Resolve<ICoroutinesPerformer>(),
-                _container.Resolve<IPlayerInputService>());
+                _container.Resolve<GameplayPopupService>());
         }
         
         public GameplayStateDefeat CreateDefeat()
         {
             return new GameplayStateDefeat(
-                _container.Resolve<GameplayStateMachine>(),
-                _container.Resolve<IPlayerInputService>(),
                 _container.Resolve<WalletService>(),
                 _container.Resolve<RewardService>(),
                 _container.Resolve<GameProgressionStatsService>(),
                 _container.Resolve<PlayerDataProvider>(),
-                _container.Resolve<ICoroutinesPerformer>());
+                _container.Resolve<ICoroutinesPerformer>(),
+                _container.Resolve<GameplayPopupService>());
         }
     }
 }

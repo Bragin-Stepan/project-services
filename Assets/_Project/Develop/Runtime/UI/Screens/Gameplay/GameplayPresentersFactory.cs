@@ -1,10 +1,14 @@
 ﻿using _Project.Develop.Runtime.Logic.Gameplay.Features.GameSession;
-using _Project.Develop.Runtime.Logic.Meta.Features;
+using _Project.Develop.Runtime.Logic.Gameplay.Features.States;
 using _Project.Develop.Runtime.UI.Core;
+using _Project.Develop.Runtime.UI.Features.Gameplay.Results;
 using _Project.Develop.Runtime.UI.Features.Gameplay.Sequence;
+using _Project.Develop.Runtime.Utilities.GameMode;
 using _Project.Develop.Runtime.Utils.ReactiveManagement;
 using Assets._Project.Develop.Runtime.Infrastructure.DI;
 using Assets._Project.Develop.Runtime.Meta.Features.Wallet;
+using Assets._Project.Develop.Runtime.Utilities.CoroutinesManagement;
+using Assets._Project.Develop.Runtime.Utilities.SceneManagement;
 
 namespace _Project.Develop.Runtime.UI.Screens.Gameplay
 {
@@ -38,6 +42,24 @@ namespace _Project.Develop.Runtime.UI.Screens.Gameplay
                 _container.Resolve<ViewsFactory>(),
                 this,
                 view);
+        }
+        
+        public WinPopupPresenter CreateWinPopupPresenter(WinPopupView view)
+        {
+            return new WinPopupPresenter(
+                _container.Resolve<ICoroutinesPerformer>(),
+                view,
+                _container.Resolve<SceneSwitcherService>());
+        }
+
+        public DefeatPopupPresenter CreateDefeatPopupPresenter(DefeatPopupView view)
+        {
+            return new DefeatPopupPresenter(
+                _container.Resolve<ICoroutinesPerformer>(),
+                view,
+                _container.Resolve<SceneSwitcherService>(),
+                _container.Resolve<GameModeRunner>(),
+                _container.Resolve<GameSessionService>());
         }
     }
 }
