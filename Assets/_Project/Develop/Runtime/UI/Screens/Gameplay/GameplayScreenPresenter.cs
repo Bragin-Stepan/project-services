@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using _Project.Develop.Runtime.Logic.Meta.Features;
+﻿using System.Collections.Generic;
 using _Project.Develop.Runtime.Logic.Meta.Features.Wallet;
 using _Project.Develop.Runtime.UI.Core;
+using _Project.Develop.Runtime.UI.Features.Gameplay.Sequence;
 using _Project.Develop.Runtime.UI.Features.StatsProgression;
 using _Project.Develop.Runtime.UI.Features.Wallet;
 using Assets._Project.Develop.Runtime.Meta.Features.Wallet;
-using TMPro.SpriteAssetUtilities;
 
 namespace _Project.Develop.Runtime.UI.Screens.Gameplay
 {
@@ -39,6 +37,7 @@ namespace _Project.Develop.Runtime.UI.Screens.Gameplay
         {
             CreateCoins();
             CreateStatList();
+            CreateSequenceList();
             
             foreach (IPresenter presenter in _childPresenters)
                 presenter.Initialize();
@@ -57,7 +56,12 @@ namespace _Project.Develop.Runtime.UI.Screens.Gameplay
         private void CreateStatList()
         {
             StatListProgressPresenter presenter = _projectPresentersFactory.CreateStatListProgressPresenter(_screen.StatsView);
-            
+            _childPresenters.Add(presenter);
+        }
+        
+        private void CreateSequenceList()
+        {
+            SequenceDisplayPresenter presenter = _gameplayPresentersFactory.CreateSequenceDisplayPresenter(_screen.SequenceListView);
             _childPresenters.Add(presenter);
         }
 

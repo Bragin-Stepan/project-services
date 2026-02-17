@@ -12,12 +12,13 @@ namespace _Project.Develop.Runtime.Logic.Gameplay.Features.GameSession
     {
         public event Action GameWon;
         public event Action GameDefeat;
+        public event Action SessionStart;
         
         private readonly SequenceFactory _sequenceFactory;
         private readonly IPlayerInputService _playerInput;
 
         private GameplayInputArgs _args;
-        private List<SequenceNodeInfo> _sequence = new();
+        private List<SequenceTileInfo> _sequence = new();
         private List<string> _currentInput = new();
         private bool _isCompleted;
 
@@ -27,8 +28,7 @@ namespace _Project.Develop.Runtime.Logic.Gameplay.Features.GameSession
             _playerInput = playerInput;
         }
         
-        public Dictionary<string, bool> Sequence 
-            => _sequence.ToDictionary(x => x.Value, x => x.IsCorrect);
+        public List<ISequenceTileInfo> Sequence => _sequence.Cast<ISequenceTileInfo>().ToList();
 
         public void StartGame(GameplayInputArgs args)
         {
@@ -39,12 +39,14 @@ namespace _Project.Develop.Runtime.Logic.Gameplay.Features.GameSession
             Debug.Log("=== Запуск игры ===");
      
             foreach (string item in _sequenceFactory.Create(_args.SequenceCount, _args.GameModeType))
-                _sequence.Add(new SequenceNodeInfo(item, false));
+                _sequence.Add(new SequenceTileInfo(item));
             
             Debug.Log($"Сгенерировано {_sequence.Count} элементов:");
             
             foreach (string value in _sequence.Select(x => x.Value)) // Перевести в UI
                 Debug.Log(value);
+            
+            SessionStart?.Invoke();
         }
 
         public void Update()
@@ -67,7 +69,7 @@ namespace _Project.Develop.Runtime.Logic.Gameplay.Features.GameSession
                 return;
             }
             
-            _sequence.ElementAt(_currentInput.Count - 1).IsCorrect = true;
+            _sequence.ElementAt(_currentInput.Count - 1).SetCorrect(true);
 
             if (_currentInput.Count == _sequence.Count)
             {
@@ -81,18 +83,6 @@ namespace _Project.Develop.Runtime.Logic.Gameplay.Features.GameSession
             _sequence.Clear();
             _currentInput.Clear();
             _isCompleted = false;
-        }
-
-        private class SequenceNodeInfo
-        {
-            public string Value;
-            public bool IsCorrect;
-            
-            public SequenceNodeInfo(string value, bool isCorrect)
-            {
-                Value = value;
-                IsCorrect = isCorrect;
-            }
         }
     }
 }
