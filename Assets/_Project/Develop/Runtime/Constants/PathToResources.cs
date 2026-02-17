@@ -54,8 +54,8 @@ namespace Assets._Project.Develop.Runtime.Utilities.SceneManagement
             {typeof(MainMenuScreenView), "UI/Screens/MainMenu/MainMenuScreenView" },
             {typeof(GameplayScreenView), "UI/Screens/Gameplay/GameplayScreenView" },
             
-            {typeof(LevelTileView), "UI/LevelsMenuPopup/LevelTile" }, //?
-            {typeof(LevelsMenuPopupView), "UI/LevelsMenuPopup/LevelsMenuPopup" }, //?
+            {typeof(LevelTileView), "UI/LevelsMenuPopup/LevelTile" },
+            {typeof(LevelsMenuPopupView), "UI/LevelsMenuPopup/LevelsMenuPopup" },
 
             {typeof(IconTextView), "UI/Common/IconTextView" },
         };
